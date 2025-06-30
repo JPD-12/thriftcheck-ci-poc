@@ -1,4 +1,4 @@
-include "../../secret.txt"
+include "../leak/secret.txt"
 
 namespace go exploit
 struct Exploit {
