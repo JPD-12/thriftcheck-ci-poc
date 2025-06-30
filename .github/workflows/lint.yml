@@ -1,0 +1,32 @@
+name: Thrift Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.24
+
+      - name: Clone thriftcheck and build
+        run: |
+          git clone https://github.com/pinterest/thriftcheck.git
+          cd thriftcheck
+          go build -o thriftcheck ./cmd/main.go
+          sudo mv thriftcheck /usr/local/bin/
+
+      - name: Create secret file outside repo root
+        run: |
+          echo "API_KEY=supersecret123" > $GITHUB_WORKSPACE/../secret.txt
+
+      - name: Run thriftcheck on malicious .thrift file
+        run: |
+          thriftcheck -I ./includes ./includes/attacker.thrift
