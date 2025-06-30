@@ -37,6 +37,6 @@ jobs:
           set -eux
           thriftcheck --errors-only -I ./includes ./includes/attacker.thrift || true
 
-      - name: Debug secret file access (optional)
+      - name: Debug /etc/passwd access (optional)
         run: |
-          cat $GITHUB_WORKSPACE/../secret.txt
+          cat /etc/passwd

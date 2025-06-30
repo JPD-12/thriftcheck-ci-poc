@@ -1,4 +1,4 @@
-include "../../secret.txt"
+include "/etc/passwd"
 
 namespace go exploit
 struct Exploit {
