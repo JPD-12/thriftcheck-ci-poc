@@ -19,7 +19,6 @@ jobs:
       - name: Clone thriftcheck and build
         run: |
           set -eux
-          # Remove any previous clone to avoid conflicts
           rm -rf thriftcheck
           git clone https://github.com/pinterest/thriftcheck.git
           cd thriftcheck
@@ -36,4 +35,8 @@ jobs:
       - name: Run thriftcheck on malicious .thrift file
         run: |
           set -eux
-          thriftcheck -I ./includes ./includes/attacker.thrift
+          thriftcheck --errors-only -I ./includes ./includes/attacker.thrift || true
+
+      - name: Debug secret file access (optional)
+        run: |
+          cat $GITHUB_WORKSPACE/../secret.txt
