@@ -18,15 +18,22 @@ jobs:
 
       - name: Clone thriftcheck and build
         run: |
+          set -eux
+          # Remove any previous clone to avoid conflicts
+          rm -rf thriftcheck
           git clone https://github.com/pinterest/thriftcheck.git
           cd thriftcheck
           go build -o thriftcheck ./cmd/main.go
           sudo mv thriftcheck /usr/local/bin/
+          ls -l /usr/local/bin/thriftcheck
 
       - name: Create secret file outside repo root
         run: |
           echo "API_KEY=supersecret123" > $GITHUB_WORKSPACE/../secret.txt
+          ls -l $GITHUB_WORKSPACE/../secret.txt
+          cat $GITHUB_WORKSPACE/../secret.txt
 
       - name: Run thriftcheck on malicious .thrift file
         run: |
+          set -eux
           thriftcheck -I ./includes ./includes/attacker.thrift
